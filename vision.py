@@ -3,6 +3,7 @@ import sys
 import numpy as np
 import serial
 
+#Set up variables
 upperBodyCascade = cv2.CascadeClassifier('haarcascade_upperbody.xml')
 webcamCapture = cv2.VideoCapture(0)
 width = 640
@@ -36,17 +37,19 @@ while True:
     numWhite = cv2.countNonZero(frame)
     numBlack = numPixels - numWhite
 
+    # Check pixels against our threshold
     oldBool = currentBool
     currentBool = numBlack > (numPixels * thresholdFrac)
     
     if (currentBool and not oldBool):
-        print "START THE HUG"
+        #START THE HUG
 	   ser.write('1');                 #send a Serial command to hug
     if (not currentBool and oldBool):
-        print "END THE HUG"            
+        #END THE HUG            
 	   ser.write('2');                 #send a Serial command to end hug
 
-    # Display frames with rectangles
+    # These next two lines bring up a window that graphically shows what the webcam is seeing.
+    # To boost performance, comment out the next two lines.
     cv2.namedWindow("", cv2.WINDOW_NORMAL)
     cv2.imshow('Video', frame)
 
